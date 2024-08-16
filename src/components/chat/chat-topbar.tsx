@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Popover,
   PopoverContent,
@@ -20,6 +21,7 @@ import { CaretSortIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { Sidebar } from "../sidebar";
 import { Message } from "ai/react";
 import { getSelectedModel } from "@/lib/model-helper";
+import { AlertCircle } from "lucide-react";
 
 interface ChatTopbarProps {
   setSelectedModel: React.Dispatch<React.SetStateAction<string>>;
@@ -45,32 +47,33 @@ export default function ChatTopbar({
 
     const fetchModels = async () => {
       if (env === "production") {
-        const fetchedModels = await fetch(process.env.NEXT_PUBLIC_OLLAMA_URL + "/api/tags");
+        const fetchedModels = await fetch(
+          process.env.NEXT_PUBLIC_OLLAMA_URL + "/api/tags"
+        );
         const json = await fetchedModels.json();
-        const apiModels = json.models.map((model : any) => model.name);
+        const apiModels = json.models.map((model: any) => model.name);
         setModels([...apiModels]);
-      } 
-      else {
-        const fetchedModels = await fetch("/api/tags") 
+      } else {
+        const fetchedModels = await fetch("/api/tags");
         const json = await fetchedModels.json();
-        const apiModels = json.models.map((model : any) => model.name);
+        const apiModels = json.models.map((model: any) => model.name);
         setModels([...apiModels]);
-    }
-    }
+      }
+    };
     fetchModels();
   }, []);
 
   const handleModelChange = (model: string) => {
     setCurrentModel(model);
     setSelectedModel(model);
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("selectedModel", model);
     }
     setOpen(false);
   };
 
   return (
-    <div className="w-full flex px-4 py-6  items-center justify-between lg:justify-center ">
+    <div className="w-full flex flex-col px-4 py-6  items-center justify-between lg:justify-center ">
       <Sheet>
         <SheetTrigger>
           <HamburgerMenuIcon className="lg:hidden w-5 h-5" />
@@ -85,7 +88,7 @@ export default function ChatTopbar({
         </SheetContent>
       </Sheet>
 
-      <Popover open={open} onOpenChange={setOpen}>
+      {/* <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             disabled={isLoading}
@@ -118,7 +121,13 @@ export default function ChatTopbar({
             </Button>
           )}
         </PopoverContent>
-      </Popover>
+      </Popover> */}
+      <Alert className="w-fit items-center flex">
+        <AlertCircle className="w-5 h-5" />
+        <AlertTitle className="leading-7">
+          <span className="text-red-500">Flood</span> alert issued in Delhi
+        </AlertTitle>
+      </Alert>
     </div>
   );
 }

@@ -51,7 +51,7 @@ export default function Chat({
 
       <ChatList
         setSelectedModel={setSelectedModel}
-        messages={messages}
+        messages={[{ role: "user", id: "1", content: "Hello World" }]}
         input={input}
         handleInputChange={handleInputChange}
         handleSubmit={handleSubmit}
